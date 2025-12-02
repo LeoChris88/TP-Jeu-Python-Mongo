@@ -3,7 +3,7 @@ from pymongo import MongoClient
 db_client = MongoClient('mongodb://localhost:27017/')
 db = db_client['jeu_video']
 
-personages = [
+personnages = [
     {"name": "Guerrier", "atk": 15, "def": 10, "pv": 100},
     {"name": "Mage", "atk": 20, "def": 5, "pv": 80},
     {"name": "Archer", "atk": 18, "def": 7, "pv": 90},
