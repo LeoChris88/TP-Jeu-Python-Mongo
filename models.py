@@ -1,4 +1,4 @@
-class Character:
+class Personnage:
     def __init__(self, name, atk, defn, pv_max):
         self.name = name
         self.atk = atk
@@ -10,7 +10,7 @@ class Character:
         self.pv = self.pv_max
 
 
-class Monster:
+class Monstre:
     def __init__(self, name, atk, defn, pv_max):
         self.name = name
         self.atk = atk

@@ -47,7 +47,7 @@ def main():
     scores_col.create_index([("score", -1)])
 
     print(f"Initialisation terminée dans la BDD '{'jeu_video'}'.")
-    print(f"{personnages_col.count_documents({})} personnages insérés.")
+    
     print(f"{monstres_col.count_documents({})} monstres insérés.")
     print("Collection 'scores' prête.")
 
