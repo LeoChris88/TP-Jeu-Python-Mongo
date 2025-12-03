@@ -24,16 +24,18 @@ def choix_personnage(personnages):
     time.sleep(1)
     print("Liste des personnages disponibles :\n")
     time.sleep(1)
-    liste = ["Guerrier", "Mage", "Archer", "Voleur", "Paladin", "Sorcier", "Chevalier", "Moine", "Berserker", "Chasseur"] # tu utilise la db
+    liste = ["Guerrier", "Mage", "Archer", "Voleur", "Paladin", "Sorcier", "Chevalier", "Moine", "Berserker", "Chasseur"]
     print(liste)
 
     while len(team) < 3:
-        choice = get_valid_int(f"Choisissez un personnage en tapant un nombre entre 1 et {len(liste)}:", len(liste))
+        choice = get_valid_int(f"Choisissez un personnage en tapant un nombre entre 1 et {len(liste)} :", len(liste))
         if choice not in range(1, 11):
             print("Choix invalide, veuillez réessayer.")
             return choix_personnage(personnages)
         perso = personnages.pop(choice - 1)
         team.append(perso)
+        print(perso.name, "ajouté à la team")
+        print("Restants :", [p.name for p in personnages])
 
     for p in team:
         print(f"- {p.name}")
