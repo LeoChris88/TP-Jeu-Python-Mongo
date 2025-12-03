@@ -5,6 +5,7 @@ from models import Personnage, Monstre
 from db_init import personnages, monstres
 import time
 
+
 def get_valid_int(message, max_choice):
     while True:
         try:
@@ -31,11 +32,13 @@ def choix_personnage(personnages):
         if choice not in range(1, 11):
             print("Choix invalide, veuillez réessayer.")
             return choix_personnage(personnages)
-        team.append(personnages[choice - 1])
-        liste.remove(liste[choice - 1])
+        perso = personnages.pop(choice - 1)
+        team.append(perso)
+
     for p in team:
         print(f"- {p.name}")
     print("\n=== TEAM VALIDÉE ===")
+    return team
 
 def combat_test(team, monstre):
     print("=== DEBUT COMBAT ===")
@@ -44,19 +47,25 @@ def combat_test(team, monstre):
 
     tour = 1
 
-    while team.est_vivant() and monstre.est_vivant():
+    while any(p.est_vivant() for p in team) and monstre.est_vivant():
         print(f"\n--- TOUR {tour} ---")
 
-        dmg_perso = calcul_degats(team[0].atk, monstre.defn)
+        dmg_perso = calcul_degats(team.atk, monstre.defn)
+
         monstre.subir_degats(dmg_perso)
         print(f"{team[0].name} attaque ({dmg_perso} dmg) -> {monstre.pv} pv reste")
+        print(f"{team[1].name} attaque ({dmg_perso} dmg) -> {monstre.pv} pv reste")
+        print(f"{team[2].name} attaque ({dmg_perso} dmg) -> {monstre.pv} pv reste")
 
-        if not monstres.est_vivant():
+        if not monstre.est_vivant():
             print(f"\n>> Le monstre {monstre.name} est vaincu !")
             break
         if team[0].pv <= 0:
             print(f"\n>> Le personnage {team[0].name} est vaincu !")
-            break
+        if team[1].pv <= 0:
+            print(f"\n>> Le personnage {team[1].name} est vaincu !")
+        if team[2].pv <= 0:
+            print(f"\n>> Le personnage {team[2].name} est vaincu !")
         dmg_monstre = monstre.attaquer(team[0])
         print(f"{monstre.name} riposte ({dmg_monstre} dmg) -> {team[0].pv} pv reste")
         tour += 1
@@ -71,7 +80,12 @@ if __name__ == "__main__":
     if monstre_data is None:
         print("Erreur : aucun monstre dans la BDD.")
     else:
-        choix_personnage([])
+        persos_db = [
+    Personnage(p["name"], p["atk"], p["defn"], p["pv"])
+    for p in personnages
+    ]
+        team = choix_personnage(persos_db)
+
 
         monstre_test = Monstre(
             monstre_data["name"],
@@ -81,4 +95,4 @@ if __name__ == "__main__":
         )
 
         print("Monstre choisi pour le combat :", monstre_test.name, "[", monstre_test.atk, "atk", monstre_test.defn, "def", monstre_test.pv, "pv]")
-        combat_test(choix_personnage, monstre_test)
+        combat_test(team, monstre_test)
