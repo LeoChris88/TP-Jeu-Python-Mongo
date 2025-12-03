@@ -3,7 +3,7 @@ import random
 
 def get_db():
     client = MongoClient("mongodb://localhost:27017/")
-    db = client["jeu_video"]
+    db = client["jeu_python"]
     return db
 
 def debug(msg):
