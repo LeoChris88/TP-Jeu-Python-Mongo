@@ -48,3 +48,6 @@ class Monstre:
         dmg = calcul_degats(self.atk, cible.defn)
         cible.subir_degats(dmg)
         return dmg
+    
+def convert_to_monster(monstre_dict):
+    return Monstre(monstre_dict['name'], monstre_dict['atk'], monstre_dict['defn'], monstre_dict['pv'])

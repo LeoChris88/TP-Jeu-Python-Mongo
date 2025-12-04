@@ -2,7 +2,7 @@
 import array
 import random
 from utils import get_db, get_random_monster, calcul_degats, pause_rapide, pause_normal, narration_nouvelle_vague
-from models import Personnage, Monstre
+from models import Personnage, Monstre,  convert_to_monster
 from db_init import personnages, monstres
 import time
 
@@ -48,8 +48,11 @@ def choix_personnage(personnages):
     print("\n=== TEAM VALIDÉE ===")
     return team 
 
+def monstre_aleatoire(monstres): 
+    return random.choice(monstres)
+
 def combat_detail(tour, monstre, team):
-    pause_normal()
+    pause_rapide()
     print(f"\n--- TOUR {tour} ---")
 
     for p in team:
@@ -60,8 +63,11 @@ def combat_detail(tour, monstre, team):
 
     if not monstre.est_vivant():
         print(f"{monstre.name} est vaincu !")
+        monstre = monstre_aleatoire(monstres)
+        monstre = convert_to_monster(monstre)
+        #
         narration_nouvelle_vague(monstre)
-        return tour + 1
+        return "monstre_vaincu"
 
     cibles = [p for p in team if p.est_vivant()]
     if cibles:
@@ -70,7 +76,6 @@ def combat_detail(tour, monstre, team):
         print(f"{monstre.name} attaque {cible.name} ({dmg} dmg) -> {cible.pv} pv restants")
         if not cible.est_vivant():
             print(f"{cible.name} est vaincu !")
-    
     return tour + 1
 
 def combat_test(team, monstre):
@@ -81,9 +86,10 @@ def combat_test(team, monstre):
     tour = 1
     while any(p.est_vivant() for p in team) and monstre.est_vivant():
         tour = combat_detail(tour, monstre, team)
-    
     if not any(p.est_vivant() for p in team):
         print("La team a été vaincue !")
+        print("=== T'AS LOOSE SALE BOT ===")
+        print(f"=== TU AS SURVECU {tour} TOUR(S) ===")
 
 if __name__ == "__main__":
     db = get_db()

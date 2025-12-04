@@ -20,7 +20,7 @@ def get_random_monster(db):
     return monstre
 
 def pause_rapide():
-    time.sleep(0.5)
+    time.sleep(0.5) #mais là le probleme c'e
 
 def pause_normal():
     time.sleep(1.5)
