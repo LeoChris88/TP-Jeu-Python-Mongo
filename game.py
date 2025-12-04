@@ -19,11 +19,11 @@ def get_valid_int(message, max_choice):
 def choix_personnage(personnages):
     team = []
     print("=== BIENVENUE DANS LE JEU PYTHON MONGO ===\n")
-    pause_rapide()
+    pause_normal()
     print("=== COMPOSEZ VOTRE TEAM (3 personnages) ===")
-    pause_rapide()
+    pause_normal()
     print("Liste des personnages disponibles :\n")
-    pause_rapide()
+    pause_normal()
     liste = ["Guerrier", "Mage", "Archer", "Voleur", "Paladin", "Sorcier", "Chevalier", "Moine", "Berserker", "Chasseur"]
     print(liste)
 
