@@ -63,33 +63,58 @@ def combat_detail(tour, monstre, team):
 
     if not monstre.est_vivant():
         print(f"{monstre.name} est vaincu !")
-        monstre = monstre_aleatoire(monstres)
-        monstre = convert_to_monster(monstre)
-        #
-        narration_nouvelle_vague(monstre)
-        return "monstre_vaincu"
+        return "monstre_mort"
 
-    cibles = [p for p in team if p.est_vivant()]
-    if cibles:
+    cibles = []
+    for p in team:
+        if p.est_vivant():
+            cibles.append(p)
+
+    if len(cibles) > 0:
         cible = random.choice(cibles)
         dmg = monstre.attaquer(cible)
         print(f"{monstre.name} attaque {cible.name} ({dmg} dmg) -> {cible.pv} pv restants")
+
         if not cible.est_vivant():
             print(f"{cible.name} est vaincu !")
+
     return tour + 1
 
 def combat_test(team, monstre):
     print("=== DEBUT COMBAT ===")
-    print(f"{team[0].name} VS {monstre.name}")
-    print("--------------------")
-    
+    for p in team:
+        print(f"- {p.name} ({p.atk} atk / {p.defn} def / {p.pv} pv)")
+        pause_normal()
+
     tour = 1
-    while any(p.est_vivant() for p in team) and monstre.est_vivant():
-        tour = combat_detail(tour, monstre, team)
-    if not any(p.est_vivant() for p in team):
-        print("La team a été vaincue !")
-        print("=== T'AS LOOSE SALE BOT ===")
-        print(f"=== TU AS SURVECU {tour} TOUR(S) ===")
+    vague = 1
+    print(f"\n=== VAGUE {vague} ===")
+
+    while True:
+        vivant = False
+        for p in team:
+            if p.est_vivant():
+                vivant = True
+                break
+        if not vivant:
+            print("La team a été vaincue !")
+            print("=== T'AS LOOSE SALE BOT ===")
+            print(f"=== TU AS SURVÉCU {vague} VAGUE(S) ===")
+            return
+        resultat = combat_detail(tour, monstre, team)
+
+        if resultat == "monstre_mort":
+            vague += 1
+            print(f"\nVAGUE {vague} !!!")
+            narration_nouvelle_vague(monstre)
+            for p in team:
+                p.reset()
+            nouveau = monstre_aleatoire(monstres)
+            monstre = convert_to_monster(nouveau)
+            print(f"\nNOUVEAU MONSTRE : {monstre.name} ({monstre.atk} atk, {monstre.defn} def, {monstre.pv} pv)")
+            tour = 1
+            continue
+        tour = resultat
 
 if __name__ == "__main__":
     db = get_db()
@@ -103,7 +128,6 @@ if __name__ == "__main__":
     for p in personnages
     ]
         team = choix_personnage(persos_db)
-
 
         monstre_test = Monstre(
             monstre_data["name"],
