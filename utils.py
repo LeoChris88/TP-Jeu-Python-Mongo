@@ -25,6 +25,11 @@ def pause_rapide():
 def pause_normal():
     time.sleep(1.5)
 
+def narration_nouvelle_vague(monstre):
+    print(f"\n>> Le monstre {monstre.name} est vaincu !")
+    print("\n=== FIN DE LA VAGUE ===")
+    print("\n=== UNE NOUVELLE VAGUE ARRIVE... ===")
+
 def calcul_degats(atk, defense):
     d = atk - (defense * 0.5)
     if d < 0:

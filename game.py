@@ -1,10 +1,10 @@
 # game.py (debut)
 import array
-from utils import get_db, get_random_monster, calcul_degats
+import random
+from utils import get_db, get_random_monster, calcul_degats, pause_rapide, pause_normal, narration_nouvelle_vague
 from models import Personnage, Monstre
 from db_init import personnages, monstres
 import time
-from utils import pause_rapide, pause_normal
 
 def get_valid_int(message, max_choice):
     while True:
@@ -15,66 +15,75 @@ def get_valid_int(message, max_choice):
             print(f"Veuillez entrer une valeur entre 1 et {max_choice}.")
         except ValueError:
             print("Veuillez entrer un nombre valide.")
-
-def choix_personnage(personnages):
-    team = []
+def afficher_menu_choix():
     print("=== BIENVENUE DANS LE JEU PYTHON MONGO ===\n")
     pause_normal()
     print("=== COMPOSEZ VOTRE TEAM (3 personnages) ===")
     pause_normal()
     print("Liste des personnages disponibles :\n")
     pause_normal()
-    liste = ["Guerrier", "Mage", "Archer", "Voleur", "Paladin", "Sorcier", "Chevalier", "Moine", "Berserker", "Chasseur"]
-    print(liste)
 
-    while len(team) < 3:
-        choice = get_valid_int(f"Choisissez un personnage en tapant un nombre entre 1 et {len(liste)} :", len(liste))
-        if choice not in range(1, 11):
-            print("Choix invalide, veuillez réessayer.")
-            return choix_personnage(personnages)
-        perso = personnages.pop(choice - 1)
-        team.append(perso)
-        print(perso.name, "ajouté à la team")
-        print("Restants :", [p.name for p in personnages])
-
+def afficher_team(team):
     for p in team:
         print(f"- {p.name}")
         pause_rapide()
+def affcher_ajout_perso_restant(perso_restant):
+    print("Personnage ajouté")
+    print("Choix Restant :")
+    for p in perso_restant:
+        print(f"- {p}")
+    
+def choix_personnage(personnages):
+    team = []
+    liste = ["Guerrier", "Mage", "Archer", "Voleur", "Paladin", "Sorcier", "Chevalier", "Moine", "Berserker", "Chasseur"]
+    afficher_menu_choix()
+    print(liste)
+    
+    while len(team) < 3:
+        choice = get_valid_int(f"Choisissez un personnage en tapant un nombre entre 1 et {len(liste)} :", len(liste))
+        perso = personnages.pop(choice - 1)
+        team.append(perso)
+    
+    afficher_team(team)
     print("\n=== TEAM VALIDÉE ===")
-    return team
+    return team 
+
+def combat_detail(tour, monstre, team):
+    pause_normal()
+    print(f"\n--- TOUR {tour} ---")
+
+    for p in team:
+        if p.est_vivant():
+            dmg_perso = max(0, p.atk - monstre.defn)
+            monstre.subir_degats(dmg_perso)
+            print(f"{p.name} attaque ({dmg_perso} dmg) -> {monstre.pv} pv restants")
+
+    if not monstre.est_vivant():
+        print(f"{monstre.name} est vaincu !")
+        narration_nouvelle_vague(monstre)
+        return tour + 1
+
+    cibles = [p for p in team if p.est_vivant()]
+    if cibles:
+        cible = random.choice(cibles)
+        dmg = monstre.attaquer(cible)
+        print(f"{monstre.name} attaque {cible.name} ({dmg} dmg) -> {cible.pv} pv restants")
+        if not cible.est_vivant():
+            print(f"{cible.name} est vaincu !")
+    
+    return tour + 1
 
 def combat_test(team, monstre):
     print("=== DEBUT COMBAT ===")
     print(f"{team[0].name} VS {monstre.name}")
     print("--------------------")
-
+    
     tour = 1
-
     while any(p.est_vivant() for p in team) and monstre.est_vivant():
-        print(f"\n--- TOUR {tour} ---")
-
-        dmg_perso = calcul_degats(team.atk, monstre.defn)
-
-        monstre.subir_degats(dmg_perso)
-        print(f"{team[0].name} attaque ({dmg_perso} dmg) -> {monstre.pv} pv reste")
-        print(f"{team[1].name} attaque ({dmg_perso} dmg) -> {monstre.pv} pv reste")
-        print(f"{team[2].name} attaque ({dmg_perso} dmg) -> {monstre.pv} pv reste")
-
-        if not monstre.est_vivant():
-            print(f"\n>> Le monstre {monstre.name} est vaincu !")
-            break
-        if team[0].pv <= 0:
-            print(f"\n>> Le personnage {team[0].name} est vaincu !")
-        if team[1].pv <= 0:
-            print(f"\n>> Le personnage {team[1].name} est vaincu !")
-        if team[2].pv <= 0:
-            print(f"\n>> Le personnage {team[2].name} est vaincu !")
-        dmg_monstre = monstre.attaquer(team[0])
-        print(f"{monstre.name} riposte ({dmg_monstre} dmg) -> {team[0].pv} pv reste")
-        tour += 1
-
-    print("\n=== FIN DU COMBAT ===\n")
-
+        tour = combat_detail(tour, monstre, team)
+    
+    if not any(p.est_vivant() for p in team):
+        print("La team a été vaincue !")
 
 if __name__ == "__main__":
     db = get_db()
