@@ -4,7 +4,7 @@ from utils import get_db, get_random_monster, calcul_degats
 from models import Personnage, Monstre
 from db_init import personnages, monstres
 import time
-
+from utils import pause_rapide, pause_normal
 
 def get_valid_int(message, max_choice):
     while True:
@@ -19,11 +19,11 @@ def get_valid_int(message, max_choice):
 def choix_personnage(personnages):
     team = []
     print("=== BIENVENUE DANS LE JEU PYTHON MONGO ===\n")
-    time.sleep(1)
+    pause_rapide()
     print("=== COMPOSEZ VOTRE TEAM (3 personnages) ===")
-    time.sleep(1)
+    pause_rapide()
     print("Liste des personnages disponibles :\n")
-    time.sleep(1)
+    pause_rapide()
     liste = ["Guerrier", "Mage", "Archer", "Voleur", "Paladin", "Sorcier", "Chevalier", "Moine", "Berserker", "Chasseur"]
     print(liste)
 
@@ -39,6 +39,7 @@ def choix_personnage(personnages):
 
     for p in team:
         print(f"- {p.name}")
+        pause_rapide()
     print("\n=== TEAM VALIDÉE ===")
     return team
 

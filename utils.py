@@ -1,3 +1,4 @@
+from time import time
 from pymongo import MongoClient
 import random
 
@@ -17,6 +18,12 @@ def get_random_monster(db):
     
     monstre = random.choice(monstres)
     return monstre
+
+def pause_rapide():
+    time.sleep(0.5)
+
+def pause_normal():
+    time.sleep(1.5)
 
 def calcul_degats(atk, defense):
     d = atk - (defense * 0.5)
