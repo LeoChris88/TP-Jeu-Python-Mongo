@@ -24,6 +24,12 @@ def pause_rapide():
 
 def pause_normal():
     time.sleep(1.5)
+        
+def narration_debut_combat(team):
+    print("=== DEBUT COMBAT ===")
+    for p in team:
+        print(f"- {p.name} ({p.atk} atk / {p.defn} def / {p.pv} pv)")
+        pause_normal()
 
 def narration_nouvelle_vague(monstre):
     print(f"\n>> Le monstre {monstre.name} est vaincu !")

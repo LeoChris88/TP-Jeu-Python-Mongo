@@ -1,7 +1,7 @@
 # game.py (debut)
 import array
 import random
-from utils import get_db, get_random_monster, calcul_degats, pause_rapide, pause_normal, narration_nouvelle_vague, message_defaite
+from utils import get_db, get_random_monster, calcul_degats, pause_rapide, pause_normal, narration_debut_combat, narration_nouvelle_vague, message_defaite
 from models import Personnage, Monstre,  convert_to_monster
 from db_init import personnages, monstres
 import time
@@ -89,11 +89,7 @@ def team_vivant(team):
             return False
 
 def combat_test(team, monstre):
-    print("=== DEBUT COMBAT ===")
-    for p in team:
-        print(f"- {p.name} ({p.atk} atk / {p.defn} def / {p.pv} pv)")
-        pause_normal()
-
+    narration_debut_combat(team)    
     tour = 1
     vague = 1
     print(f"\n=== VAGUE {vague} ===")
