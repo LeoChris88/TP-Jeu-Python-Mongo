@@ -81,6 +81,13 @@ def combat_detail(tour, monstre, team):
 
     return tour + 1
 
+def team_vivant(team):
+    for p in team:
+        if p.est_vivant():
+            return True
+        else :
+            return False
+
 def combat_test(team, monstre):
     print("=== DEBUT COMBAT ===")
     for p in team:
@@ -92,12 +99,7 @@ def combat_test(team, monstre):
     print(f"\n=== VAGUE {vague} ===")
 
     while True:
-        vivant = False
-        for p in team:
-            if p.est_vivant():
-                vivant = True
-                break
-        if not vivant:
+        if not team_vivant(team):
             return message_defaite(vague)
         resultat = combat_detail(tour, monstre, team)
 
