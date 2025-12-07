@@ -6,6 +6,14 @@ from models import Personnage, Monstre,  convert_to_monster
 from db_init import personnages, monstres
 import time
 
+def afficher_menu_choix():
+    print("=== BIENVENUE DANS LE JEU PYTHON MONGO ===\n")
+    pause_normal()
+    print("=== COMPOSEZ VOTRE TEAM (3 personnages) ===")
+    pause_normal()
+    print("Liste des personnages disponibles :\n")
+    pause_normal()
+
 def get_valid_int(message, max_choice):
     while True:
         try:
@@ -15,13 +23,6 @@ def get_valid_int(message, max_choice):
             print(f"Veuillez entrer une valeur entre 1 et {max_choice}.")
         except ValueError:
             print("Veuillez entrer un nombre valide.")
-def afficher_menu_choix():
-    print("=== BIENVENUE DANS LE JEU PYTHON MONGO ===\n")
-    pause_normal()
-    print("=== COMPOSEZ VOTRE TEAM (3 personnages) ===")
-    pause_normal()
-    print("Liste des personnages disponibles :\n")
-    pause_normal()
 
 def afficher_team(team):
     for p in team:
@@ -115,26 +116,3 @@ def combat_test(team, monstre):
             tour = 1
             continue
         tour = resultat
-
-if __name__ == "__main__":
-    db = get_db()
-    monstre_data = get_random_monster(db)
-
-    if monstre_data is None:
-        print("Erreur : aucun monstre dans la BDD.")
-    else:
-        persos_db = [
-    Personnage(p["name"], p["atk"], p["defn"], p["pv"])
-    for p in personnages
-    ]
-        team = choix_personnage(persos_db)
-
-        monstre_test = Monstre(
-            monstre_data["name"],
-            monstre_data["atk"],
-            monstre_data["def"],
-            monstre_data["pv"]
-        )
-
-        print("Monstre choisi pour le combat :", monstre_test.name, "[", monstre_test.atk, "atk", monstre_test.defn, "def", monstre_test.pv, "pv]")
-        combat_test(team, monstre_test)
