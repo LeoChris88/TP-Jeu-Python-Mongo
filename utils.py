@@ -36,14 +36,7 @@ def calcul_degats(atk, defense):
         d = 0
     return int(d)
 
-if __name__ == "__main__":
-    db = get_db()
-    print("Connexion BDD OK\n")
-
-    print("Test pour récuperer un monstre aléatoire :")
-    m = get_random_monster(db)
-    print(" -> Monstre tiré :", m)
-
-    print("\nTest calcul degats :")
-    print("20 atk vs 8 def =", calcul_degats(20, 8))
-    print("10 atk vs 40 def =", calcul_degats(10, 40))
+def message_defaite(vague):
+    print("La team a été vaincue !")
+    print("=== T'AS LOOSE SALE BOT ===")
+    print(f"=== TU AS SURVÉCU {vague} VAGUE(S) ===")
