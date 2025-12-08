@@ -3,10 +3,24 @@ from game import choix_personnage, combat_test
 from utils import get_db, get_random_monster
 from models import Personnage, Monstre
 
+def afficher_menu_choix():
+    print("1) Démarrer le jeu")
+    print("2) Afficher le classement")
+    print("3) Quitter")
+
+def choix_console():
+    choix = input("Votre choix :")
+    while choix not in ["1", "2", "3"]:
+        print("Choisis bien golmon")
+    return choix
+
 if __name__ == "__main__":
     db = get_db()
     monstre_data = get_random_monster(db)
-
+    afficher_menu_choix()
+    choix = choix_console()
+        
+    
     if monstre_data is None:
         print("Erreur : aucun monstre dans la BDD.")
     else:

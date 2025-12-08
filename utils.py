@@ -13,14 +13,14 @@ def debug(msg):
 def get_random_monster(db):
     monstres = list(db["monstres"].find({}))
     if len(monstres) == 0:
-        debug("Pas de monstres dans la bdd (??)")
+        debug("Pas de monstres dans la bdd")
         return None
     
     monstre = random.choice(monstres)
     return monstre
 
 def pause_rapide():
-    time.sleep(0.5) #mais là le probleme c'e
+    time.sleep(0.5)
 
 def pause_normal():
     time.sleep(1.5)
@@ -35,6 +35,26 @@ def narration_nouvelle_vague(monstre):
     print(f"\n>> Le monstre {monstre.name} est vaincu !")
     print("\n=== FIN DE LA VAGUE ===")
     print("\n=== UNE NOUVELLE VAGUE ARRIVE... ===")
+
+def scores_bdd(limit=3):
+    db = get_db()
+    collection = db["scores"]
+    scores= list(collection.find().sort("score", -1).limit(limit))
+    return scores
+
+def afficher_score():
+    print("\n=== CLASSEMENT DES JOUEURS ===\n")
+
+    scores = scores_bdd(3)
+
+    if not scores:
+        print("Aucun score enregistré pour le moment.")
+        return
+
+    for i, s in enumerate(scores, start=1):
+        joueur = s.get("player", "Inconnu")
+        vagues = s.get("score", 0)
+        print(f"{i}) {joueur} - {vagues} vagues")
 
 def calcul_degats(atk, defense):
     d = atk - (defense * 0.5)

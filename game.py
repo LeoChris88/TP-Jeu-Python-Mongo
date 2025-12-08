@@ -1,18 +1,9 @@
-# game.py (debut)
 import array
 import random
 from utils import get_db, get_random_monster, calcul_degats, pause_rapide, pause_normal, narration_debut_combat, narration_nouvelle_vague, message_defaite
 from models import Personnage, Monstre,  convert_to_monster
 from db_init import personnages, monstres
 import time
-
-def afficher_menu_choix():
-    print("=== BIENVENUE DANS LE JEU PYTHON MONGO ===\n")
-    pause_normal()
-    print("=== COMPOSEZ VOTRE TEAM (3 personnages) ===")
-    pause_normal()
-    print("Liste des personnages disponibles :\n")
-    pause_normal()
 
 def get_valid_int(message, max_choice):
     while True:
@@ -37,7 +28,6 @@ def affcher_ajout_perso_restant(perso_restant):
 def choix_personnage(personnages):
     team = []
     liste = ["Guerrier", "Mage", "Archer", "Voleur", "Paladin", "Sorcier", "Chevalier", "Moine", "Berserker", "Chasseur"]
-    afficher_menu_choix()
     print(liste)
     
     while len(team) < 3:
