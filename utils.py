@@ -42,7 +42,7 @@ def scores_bdd(limit=3):
     scores= list(collection.find().sort("score", -1).limit(limit))
     return scores
 
-def afficher_score():
+def afficher_scores():
     print("\n=== CLASSEMENT DES JOUEURS ===\n")
 
     scores = scores_bdd(3)
