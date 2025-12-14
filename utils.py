@@ -88,3 +88,28 @@ def menu_fin_partie():
         choix = input("Choisissez 1 ou 2 : ")
 
     return choix
+
+def buff_monstre(monstre, vague):
+    monstre.pv = int(monstre.pv * (1 + 0.1 * (vague - 1)))
+    monstre.atk = int(monstre.atk * (1 + 0.05 * (vague - 1)))
+
+def buff_perso():
+    print("1) +5 ATK pour toute la team")
+    print("2) +5 DEF pour toute la team")
+    print("3) +20 PV max pour toute la team")
+
+    choix = input("Votre choix : ")
+    while choix not in ["1", "2", "3"]:
+        choix = input("Votre choix : ")
+
+    return choix
+
+def appliquer_bonus(team, choix):
+    for p in team:
+        if choix == "1":
+            p.atk += 5
+        elif choix == "2":
+            p.defn += 5
+        elif choix == "3":
+            p.pv += 20
+            p.pv_max += 20

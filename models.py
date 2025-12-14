@@ -1,10 +1,10 @@
 class Personnage:
-    def __init__(self, name, atk, defn, pv_max):
+    def __init__(self, name, atk, defn, pv):
         self.name = name
         self.atk = atk
         self.defn = defn
-        self.pv_max = pv_max
-        self.pv = pv_max
+        self.pv_max = pv
+        self.pv = pv
 
     def reset(self):
         self.pv = self.pv_max

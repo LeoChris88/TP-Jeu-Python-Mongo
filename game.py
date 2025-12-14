@@ -1,6 +1,6 @@
 import array
 import random
-from utils import get_db, get_random_monster, calcul_degats, pause_rapide, pause_normal, narration_debut_combat, narration_nouvelle_vague, message_defaite
+from utils import get_db, get_random_monster, calcul_degats, pause_rapide, pause_normal, narration_debut_combat, narration_nouvelle_vague, message_defaite, buff_monstre, buff_perso, appliquer_bonus
 from models import Personnage, Monstre,  convert_to_monster
 from db_init import personnages, monstres
 import time
@@ -88,12 +88,15 @@ def combat_test(team, monstre):
 
         if resultat == "monstre_mort":
             vague += 1
+            choix = buff_perso()
+            appliquer_bonus(team, choix)
             print(f"\nVAGUE {vague} !!!")
             narration_nouvelle_vague(monstre)
             for p in team:
                 p.reset()
             nouveau = monstre_aleatoire(monstres)
             monstre = convert_to_monster(nouveau)
+            buff_monstre(monstre, vague)
             print(f"\nNOUVEAU MONSTRE : {monstre.name} ({monstre.atk} atk, {monstre.defn} def, {monstre.pv} pv)")
             tour = 1
             continue
