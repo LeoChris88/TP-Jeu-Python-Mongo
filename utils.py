@@ -39,8 +39,20 @@ def narration_nouvelle_vague(monstre):
 def scores_bdd(limit=3):
     db = get_db()
     collection = db["scores"]
-    scores= list(collection.find().sort("score", -1).limit(limit))
-    return scores
+    return list(
+        collection.find()
+        .sort("score", -1)
+        .limit(limit)
+    )
+
+def sauvegarde_scores(pseudo, vague):
+    db = get_db()
+    collection = db["scores"]
+
+    collection.insert_one({
+        "player": pseudo,
+        "score": vague
+    })
 
 def afficher_scores():
     print("\n=== CLASSEMENT DES JOUEURS ===\n")
@@ -66,3 +78,13 @@ def message_defaite(vague):
     print("La team a été vaincue !")
     print("=== T'AS LOOSE SALE BOT ===")
     print(f"=== TU AS SURVÉCU {vague} VAGUE(S) ===")
+
+def menu_fin_partie():
+    print("\n1) Rejouer")
+    print("2) Quitter")
+
+    choix = input("Votre choix : ")
+    while choix not in ["1", "2"]:
+        choix = input("Choisissez 1 ou 2 : ")
+
+    return choix

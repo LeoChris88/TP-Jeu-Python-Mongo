@@ -72,11 +72,7 @@ def combat_detail(tour, monstre, team):
     return tour + 1
 
 def team_vivant(team):
-    for p in team:
-        if p.est_vivant():
-            return True
-        else :
-            return False
+    return any(p.est_vivant() for p in team)
 
 def combat_test(team, monstre):
     narration_debut_combat(team)    
@@ -86,7 +82,8 @@ def combat_test(team, monstre):
 
     while True:
         if not team_vivant(team):
-            return message_defaite(vague)
+            message_defaite(vague)
+            return vague
         resultat = combat_detail(tour, monstre, team)
 
         if resultat == "monstre_mort":
